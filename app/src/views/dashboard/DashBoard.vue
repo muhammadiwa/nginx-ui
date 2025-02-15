@@ -32,10 +32,12 @@ import {
   StopOutlined,
   ApiOutlined,
   WarningOutlined,
-  CloseCircleOutlined
+  CloseCircleOutlined,
+  ShieldOutlined
 } from '@ant-design/icons-vue'
 import logo from '@/assets/img/logo-primadigi.png'
 import background from '@/assets/img/login.mp4'
+import AppSecDashboard from '@/components/AppSec/AppSecDashboard.vue'
 
 const statistics = ref({
   requests: '198.4k',
@@ -368,23 +370,9 @@ const thisYear = new Date().getFullYear()
           </div>
         </div>
 
-        <!-- Country Stats -->
-        <div class="grid grid-cols-1 gap-6">
-          <!-- Requests Status -->
-          <div class="bg-white rounded-lg shadow p-6">
-            <div class="flex justify-between items-center mb-4">
-              <h2 class="text-lg font-semibold">Requests Status (Last 24 Hours)</h2>
-            </div>
-            <v-chart class="request-chart" :option="requestsChartOption" autoresize />
-          </div>
-
-          <!-- Blocking Status -->
-          <div class="bg-white rounded-lg shadow p-6">
-            <div class="flex justify-between items-center mb-4">
-              <h2 class="text-lg font-semibold">Blocking Status (Last 24 Hours)</h2>
-            </div>
-            <v-chart class="request-chart" :option="blockingChartOption" autoresize />
-          </div>
+        <!-- AppSec Section -->
+        <div class="col-span-1">
+          <AppSecDashboard />
         </div>
       </div>
 

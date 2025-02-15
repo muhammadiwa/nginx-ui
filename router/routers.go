@@ -25,10 +25,12 @@ import (
 	"github.com/uozi-tech/cosy"
 )
 
+// InitRouter initializes the router
 func InitRouter() {
 	r := cosy.GetEngine()
 
 	initEmbedRoute(r)
+	initUiRoute(r)
 
 	r.NoRoute(func(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{
@@ -76,6 +78,46 @@ func InitRouter() {
 			nginxLog.InitRouter(w)
 			upstream.InitRouter(w)
 			system.InitWebSocketRouter(w)
+		}
+
+		// AppSec routes
+		appsec := root.Group("/v1/appsec")
+		{
+			appsec.GET("/config", func(c *gin.Context) {
+				c.JSON(http.StatusOK, gin.H{
+					"message": "AppSec config",
+				})
+			})
+			appsec.PUT("/config", func(c *gin.Context) {
+				c.JSON(http.StatusOK, gin.H{
+					"message": "AppSec config updated",
+				})
+			})
+			appsec.GET("/policies", func(c *gin.Context) {
+				c.JSON(http.StatusOK, gin.H{
+					"message": "AppSec policies",
+				})
+			})
+			appsec.POST("/policies", func(c *gin.Context) {
+				c.JSON(http.StatusOK, gin.H{
+					"message": "AppSec policy created",
+				})
+			})
+			appsec.PUT("/policies/:id", func(c *gin.Context) {
+				c.JSON(http.StatusOK, gin.H{
+					"message": "AppSec policy updated",
+				})
+			})
+			appsec.DELETE("/policies/:id", func(c *gin.Context) {
+				c.JSON(http.StatusOK, gin.H{
+					"message": "AppSec policy deleted",
+				})
+			})
+			appsec.GET("/stats", func(c *gin.Context) {
+				c.JSON(http.StatusOK, gin.H{
+					"message": "AppSec stats",
+				})
+			})
 		}
 	}
 }
