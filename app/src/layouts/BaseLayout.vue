@@ -56,7 +56,7 @@ provide('breadList', breadList)
         width="256"
         @close="drawerVisible = false"
       >
-        <SideBar />
+        <SideBar :collapsed="false" />
       </ADrawer>
     </div>
 
@@ -68,7 +68,7 @@ provide('breadList', breadList)
       theme="light"
       class="layout-sider"
     >
-      <SideBar />
+      <SideBar :collapsed="collapsed" />
     </ALayoutSider>
 
     <ALayout class="main-container">
@@ -99,8 +99,18 @@ provide('breadList', breadList)
 
 <style lang="less" scoped>
 .layout-sider {
-  @media (max-width: 600px) {
-    display: none;
+  background-color: #021629 !important;
+  border-right: none !important;
+
+  :deep(.ant-layout-sider-trigger) {
+    background-color: #021629 !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.85) !important;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: white !important;
+    }
   }
 }
 
@@ -152,6 +162,18 @@ body {
 
 .ant-layout-header {
   padding: 0 !important;
+  background-color: #021629 !important;
+  color: white !important;
+
+  /* Memastikan elemen dalam header juga menggunakan warna yang sesuai */
+  .ant-menu {
+    background-color: #021629 !important;
+    color: white !important;
+  }
+
+  .ant-btn {
+    color: white !important;
+  }
 }
 
 .ant-layout-sider {
@@ -160,6 +182,15 @@ body {
   }
 
   box-shadow: 2px 0 8px rgba(29, 35, 41, 0.05);
+  background-color: #021629 !important;
+
+  .ant-layout-sider-children {
+    background-color: #021629 !important;
+  }
+
+  .ant-layout-sider-trigger {
+    background-color: #021629 !important;
+  }
 }
 
 .ant-drawer-body {
@@ -215,6 +246,25 @@ body {
 @media (orientation: portrait) {
   .full-screen-wrapper {
     padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+  }
+}
+
+/* Mode Dark */
+.dark {
+  .ant-layout-sider {
+    background-color: #141414 !important;
+    
+    .ant-layout-sider-children {
+      background-color: #141414 !important;
+    }
+
+    .ant-layout-sider-trigger {
+      background-color: #141414 !important;
+    }
+  }
+
+  .ant-layout-header {
+    background-color: #141414 !important;
   }
 }
 </style>

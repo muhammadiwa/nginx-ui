@@ -267,6 +267,15 @@ export const routes: RouteRecordRaw[] = [
           icon: SettingOutlined,
         },
       },
+      {
+        path: 'security-logs',
+        name: 'security-logs',
+        component: () => import('@/views/logs/SecurityLogs.vue'),
+        meta: {
+          name: () => $gettext('Security Logs'),
+          icon: SettingOutlined,
+        },
+      },
       // {
       //   path: 'waf',
       //   name: 'Waf',

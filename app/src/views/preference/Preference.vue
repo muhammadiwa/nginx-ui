@@ -11,6 +11,7 @@ import CertSettings from '@/views/preference/CertSettings.vue'
 import LogrotateSettings from '@/views/preference/LogrotateSettings.vue'
 import NginxSettings from '@/views/preference/NginxSettings.vue'
 import OpenAISettings from '@/views/preference/OpenAISettings.vue'
+import PolicySettings from '@/views/preference/PolicySettings.vue'
 import { message } from 'ant-design-vue'
 import { storeToRefs } from 'pinia'
 
@@ -176,6 +177,12 @@ onMounted(() => {
           :tab="$gettext('Logrotate')"
         >
           <LogrotateSettings />
+        </ATabPane>
+        <ATabPane
+          key="policy"
+          :tab="$gettext('Policy')"
+        >
+          <PolicySettings />
         </ATabPane>
       </ATabs>
     </div>

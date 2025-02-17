@@ -60,20 +60,80 @@ const headerRef = useTemplateRef('headerRef') as Readonly<ShallowRef<HTMLDivElem
   height: 64px;
   padding: 0 20px 0 0;
   background: transparent;
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: none;
   width: 100%;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 
   a {
-    color: #000000;
+    color: rgba(255, 255, 255, 0.85) !important;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: white !important;
+    }
+  }
+
+  .anticon {
+    color: rgba(255, 255, 255, 0.85) !important;
+    font-size: 18px;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: white !important;
+    }
+  }
+
+  .tool {
+    .anticon {
+      color: rgba(255, 255, 255, 0.85) !important;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: white !important;
+      }
+    }
+  }
+
+  .user-wrapper {
+    :deep(.anticon) {
+      color: rgba(255, 255, 255, 0.85) !important;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: white !important;
+      }
+    }
+    :deep(.ant-btn) {
+      color: rgba(255, 255, 255, 0.85) !important;
+      transition: all 0.3s ease;
+
+      &:hover {
+        color: white !important;
+      }
+
+      .anticon {
+        color: rgba(255, 255, 255, 0.85) !important;
+        transition: color 0.3s ease;
+
+        &:hover {
+          color: white !important;
+        }
+      }
+    }
   }
 }
 
 .dark {
   .header {
-    box-shadow: 1px 1px 0 0 #404040;
+    box-shadow: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 
     a {
-      color: #fafafa;
+      color: rgba(255, 255, 255, 0.85) !important;
+
+      &:hover {
+        color: white !important;
+      }
     }
   }
 }

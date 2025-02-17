@@ -11,6 +11,7 @@ import (
 	nginxLog "github.com/0xJacky/Nginx-UI/api/nginx_log"
 	"github.com/0xJacky/Nginx-UI/api/notification"
 	"github.com/0xJacky/Nginx-UI/api/openai"
+	"github.com/0xJacky/Nginx-UI/api/preference"
 	"github.com/0xJacky/Nginx-UI/api/public"
 	"github.com/0xJacky/Nginx-UI/api/settings"
 	"github.com/0xJacky/Nginx-UI/api/sites"
@@ -64,6 +65,12 @@ func InitRouter() {
 			openai.InitRouter(g)
 			cluster.InitRouter(g)
 			notification.InitRouter(g)
+
+			// Add policy endpoints
+
+			g.GET("/preference/policy", preference.GetPolicy)
+
+			g.POST("/preference/policy", preference.SavePolicy)
 		}
 
 		// Authorization required and websocket request
