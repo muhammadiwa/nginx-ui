@@ -12,4 +12,11 @@ func InitRouter(r *gin.RouterGroup) {
 
 	r.GET("settings/auth/banned_ips", GetBanLoginIP)
 	r.DELETE("settings/auth/banned_ip", RemoveBannedIP)
+
+	// Local Policy endpoints - with auth middleware
+	policyGroup := r.Group("settings/policy", middleware.AuthRequired())
+	{
+		policyGroup.GET("", GetLocalPolicy)
+		policyGroup.POST("", middleware.RequireSecureSession(), SaveLocalPolicy)
+	}
 }

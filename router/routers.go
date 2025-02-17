@@ -1,7 +1,10 @@
 package router
 
 import (
+	"fmt"
 	"net/http"
+	"os/exec"
+	"strings"
 
 	"github.com/0xJacky/Nginx-UI/api/analytic"
 	"github.com/0xJacky/Nginx-UI/api/certificate"
@@ -11,7 +14,6 @@ import (
 	nginxLog "github.com/0xJacky/Nginx-UI/api/nginx_log"
 	"github.com/0xJacky/Nginx-UI/api/notification"
 	"github.com/0xJacky/Nginx-UI/api/openai"
-	"github.com/0xJacky/Nginx-UI/api/preference"
 	"github.com/0xJacky/Nginx-UI/api/public"
 	"github.com/0xJacky/Nginx-UI/api/settings"
 	"github.com/0xJacky/Nginx-UI/api/sites"
@@ -25,6 +27,49 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/uozi-tech/cosy"
 )
+
+const policyPath = "/etc/cp/conf/local_policy.yaml"
+
+// Policy handlers
+func getLocalPolicy(c *gin.Context) {
+	cmd := exec.Command("sudo", "cat", policyPath)
+	output, err := cmd.Output()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": fmt.Sprintf("Failed to read policy file: %v", err),
+		})
+		return
+	}
+
+	c.Header("Content-Type", "application/x-yaml")
+	c.String(http.StatusOK, string(output))
+}
+
+func saveLocalPolicy(c *gin.Context) {
+	var req struct {
+		Content string `json:"content" binding:"required"`
+	}
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid request format",
+		})
+		return
+	}
+
+	cmd := exec.Command("sudo", "tee", policyPath)
+	cmd.Stdin = strings.NewReader(req.Content)
+	if err := cmd.Run(); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": fmt.Sprintf("Failed to save policy file: %v", err),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Policy saved successfully",
+	})
+}
 
 // InitRouter initializes the router
 func InitRouter() {
@@ -41,9 +86,14 @@ func InitRouter() {
 
 	root := r.Group("/api")
 	{
+		// Public routes (no auth required)
 		public.InitRouter(root)
 		system.InitPublicRouter(root)
 		user.InitAuthRouter(root)
+
+		// Policy routes (tanpa auth)
+		root.GET("/local_policy", getLocalPolicy)
+		root.POST("/local_policy", saveLocalPolicy)
 
 		// Authorization required and not websocket request
 		g := root.Group("/", middleware.AuthRequired(), middleware.Proxy())
@@ -65,12 +115,6 @@ func InitRouter() {
 			openai.InitRouter(g)
 			cluster.InitRouter(g)
 			notification.InitRouter(g)
-
-			// Add policy endpoints
-
-			g.GET("/preference/policy", preference.GetPolicy)
-
-			g.POST("/preference/policy", preference.SavePolicy)
 		}
 
 		// Authorization required and websocket request
