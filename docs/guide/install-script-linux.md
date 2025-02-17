@@ -7,7 +7,7 @@ please refer to the [quick start](./getting-started) guide for manual installati
 
 ### `install.sh install`
 
-Install or Update Nginx UI.
+Install or Update PrimeWaf.
 
 ### Usage
 
@@ -19,7 +19,7 @@ install.sh install [OPTIONS]
 
 | Options               |                                                                                                                 |
 |-----------------------|-----------------------------------------------------------------------------------------------------------------|
-| `-l, --local <file>`  | Install Nginx UI from a local file (`string`)                                                                   |
+| `-l, --local <file>`  | Install PrimeWaf from a local file (`string`)                                                                   |
 | `-p, --proxy <url>`   | Download through a proxy server (`string`)<br/>e.g., `-p http://127.0.0.1:8118` or `-p socks5://127.0.0.1:1080` |
 | `-r, --reverse-proxy` | Download through a reverse proxy server (`string`)<br/>e.g., `-r https://mirror.ghproxy.com/`                          |
 
@@ -27,12 +27,12 @@ install.sh install [OPTIONS]
 ### Quick Usage
 
 ```shell
-bash <(curl -L -s https://raw.githubusercontent.com/0xJacky/nginx-ui/main/install.sh) install
+bash -c "$(curl -L https://raw.githubusercontent.com/0xJacky/nginx-ui/main/install.sh)" @ install
 ```
 
 The default listening port is `9000`, and the default HTTP Challenge port is `9180`.
 If there is a port conflict, please modify `/usr/local/etc/nginx-ui/app.ini` manually,
-then use `systemctl restart nginx-ui` to restart the Nginx UI service.
+then use `systemctl restart nginx-ui` to restart the PrimeWaf service.
 For more information, please check [reference for config](./config-server).
 
 
@@ -40,7 +40,7 @@ For more information, please check [reference for config](./config-server).
 
 ### `install.sh remove`
 
-Remove Nginx UI.
+Remove PrimeWaf.
 
 ### Usage
 
@@ -52,20 +52,20 @@ install.sh remove [OPTIONS]
 
 | Options   |                                                                       |
 |-----------|-----------------------------------------------------------------------|
-| `--purge` | Remove all the Nginx UI files, include logs, configs, etc (`boolean`) |
+| `--purge` | Remove all the PrimeWaf files, include logs, configs, etc (`boolean`) |
 
 ### Quick Usage
 
 ::: code-group
 
 ```shell [Remove]
-# Remove Nginx UI, except configuration and database files
-bash <(curl -L -s https://raw.githubusercontent.com/0xJacky/nginx-ui/main/install.sh) remove
+# Remove PrimeWaf, except configuration and database files
+bash -c "$(curl -L https://raw.githubusercontent.com/0xJacky/nginx-ui/main/install.sh)" @ remove
 ```
 
 ```shell [Purge]
-# Remove all the Nginx UI file, include configuration and database files
-bash <(curl -L -s https://raw.githubusercontent.com/0xJacky/nginx-ui/main/install.sh) remove --purge
+# Remove all the PrimeWaf file, include configuration and database files
+bash -c "$(curl -L https://raw.githubusercontent.com/0xJacky/nginx-ui/main/install.sh)" @ remove --purge
 ```
 
 :::
@@ -85,12 +85,12 @@ install.sh help
 ### Quick Usage
 
 ```shell
-bash <(curl -L -s https://raw.githubusercontent.com/0xJacky/nginx-ui/main/install.sh) help
+bash -c "$(curl -L https://raw.githubusercontent.com/0xJacky/nginx-ui/main/install.sh)" @ help
 ```
 
 ## Control Service
 
-By this script, the Nginx UI will be installed as `nginx-ui` service in systemd.
+By this script, the PrimeWaf will be installed as `nginx-ui` service in systemd.
 Please use the follow `systemctl` command to control it.
 
 ::: code-group

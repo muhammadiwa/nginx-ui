@@ -1,8 +1,8 @@
 import { defineConfig } from 'vitepress'
-import {projectUrl, editLinkPattern} from './common'
+import { projectUrl, editLinkPattern } from './common'
 
 export const commitRef = process.env.COMMIT_REF ?
-    `<a href="${projectUrl}/commit/${process.env.COMMIT_REF}">` + process.env.COMMIT_REF.slice(0, 8) + '</a>':
+    `<a href="${projectUrl}/commit/${process.env.COMMIT_REF}">` + process.env.COMMIT_REF.slice(0, 8) + '</a>' :
     'dev'
 
 function thisYear() {
@@ -10,7 +10,7 @@ function thisYear() {
 }
 
 export const sharedConfig = defineConfig({
-    title: 'Nginx UI',
+    title: 'PrimeWaf',
     description: 'Yet another Nginx Web UI',
 
     head: [
@@ -33,11 +33,17 @@ export const sharedConfig = defineConfig({
 
         footer: {
             message: `Released under the AGPL-3.0 License. (${commitRef})`,
-            copyright: 'Copyright © 2021-' + thisYear() + ' Nginx UI Team'
+            copyright: 'Copyright © 2021-' + thisYear() + ' PrimeWaf Team'
         },
 
         socialLinks: [
-            {icon: 'github', link: projectUrl}
+            { icon: 'github', link: projectUrl }
         ]
+    },
+
+    vite: {
+        server: {
+            port: Number.parseInt(process.env.VITE_PORT ?? '3003')
+        }
     }
 })

@@ -25,7 +25,7 @@ const members = [
 ]
 </script>
 
-# 何為 Nginx UI?
+# 何為 PrimeWaf?
 
 ![Dashboard](/assets/dashboard_zh_CN.png)
 
@@ -35,9 +35,9 @@ const members = [
 
 </div>
 
-Nginx UI 是一個全新的 Nginx 網路管理介面，旨在簡化 Nginx 伺服器的管理和配置。它提供實時伺服器統計資料、ChatGPT
-助手、一鍵部署、Let's Encrypt 證書的自動續簽以及使用者友好的網站配置編輯工具。此外，Nginx UI 還提供了線上訪問 Nginx
-日誌、配置檔案的自動測試和過載、網路終端、深色模式和自適應網頁設計等功能。Nginx UI 採用 Go 和 Vue 構建，確保在管理 Nginx
+PrimeWaf 是一個全新的 Nginx 網路管理介面，旨在簡化 Nginx 伺服器的管理和配置。它提供實時伺服器統計資料、ChatGPT
+助手、一鍵部署、Let's Encrypt 證書的自動續簽以及使用者友好的網站配置編輯工具。此外，PrimeWaf 還提供了線上訪問 Nginx
+日誌、配置檔案的自動測試和過載、網路終端、深色模式和自適應網頁設計等功能。PrimeWaf 採用 Go 和 Vue 構建，確保在管理 Nginx
 伺服器時提供無縫高效的體驗。
 
 ## 我們的團隊
@@ -59,7 +59,7 @@ Nginx UI 是一個全新的 Nginx 網路管理介面，旨在簡化 Nginx 伺服
 
 ## 可用作業系統
 
-Nginx UI 可在以下作業系統中使用：
+PrimeWaf 可在以下作業系統中使用：
 
 - macOS 11 Big Sur 及之後版本（amd64 / arm64）
 - Linux 2.6.23 及之後版本（x86 / amd64 / arm64 / armv5 / armv6 / armv7）
@@ -71,11 +71,15 @@ Nginx UI 可在以下作業系統中使用：
 
 ## 國際化
 
-- 英語
-- 簡體中文
-- 繁體中文
+我們目前官方支援以下語言：
 
-我們歡迎您將專案翻譯成任何語言。
+- 英文
+- 簡體中文
+- 正体中文
+
+由於我們並非英文母語者，儘管已盡力確保準確性，仍可能有改進的空間。若您發現任何問題，歡迎提供回饋！
+
+此外，感謝熱心的社群貢獻更多語言支援，歡迎前往 [Weblate](https://weblate.nginxui.com) 瀏覽並參與翻譯，共同打造更完善的多語言體驗！
 
 ## 構建基於
 

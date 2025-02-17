@@ -13,8 +13,6 @@ function clear() {
     message.success($gettext('Cleared successfully'))
     curd.value?.get_list()
     unreadCount.value = 0
-  }).catch(e => {
-    message.error($gettext(e?.message ?? 'Server error'))
   })
 }
 
@@ -26,6 +24,7 @@ watch(unreadCount, () => {
 <template>
   <StdCurd
     ref="curd"
+    :scroll-x="1000"
     :title="$gettext('Notification')"
     :columns="notificationColumns"
     :api="notification"

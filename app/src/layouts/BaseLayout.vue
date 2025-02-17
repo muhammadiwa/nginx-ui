@@ -8,12 +8,24 @@ import FooterLayout from './FooterLayout.vue'
 import HeaderLayout from './HeaderLayout.vue'
 import SideBar from './SideBar.vue'
 
-const drawer_visible = ref(false)
+const drawerVisible = ref(false)
 const collapsed = ref(collapse())
+const hideLayoutSidebar = ref(false)
 
-addEventListener('resize', _.throttle(() => {
+function _init() {
   collapsed.value = collapse()
-}, 50))
+  hideLayoutSidebar.value = getClientWidth() < 600
+}
+
+const init = _.throttle(_init, 50)
+
+onMounted(init)
+
+addEventListener('resize', init)
+
+onUnmounted(() => {
+  removeEventListener('resize', init)
+})
 
 function getClientWidth() {
   return document.body.clientWidth
@@ -38,29 +50,30 @@ provide('breadList', breadList)
   <ALayout class="full-screen-wrapper min-h-screen">
     <div class="drawer-sidebar">
       <ADrawer
-        v-model:open="drawer_visible"
+        v-model:open="drawerVisible"
         :closable="false"
         placement="left"
         width="256"
-        @close="drawer_visible = false"
+        @close="drawerVisible = false"
       >
-        <SideBar />
+        <SideBar :collapsed="false" />
       </ADrawer>
     </div>
 
     <ALayoutSider
+      v-if="!hideLayoutSidebar"
       v-model:collapsed="collapsed"
       collapsible
       :style="{ zIndex: 11 }"
       theme="light"
       class="layout-sider"
     >
-      <SideBar />
+      <SideBar :collapsed="collapsed" />
     </ALayoutSider>
 
     <ALayout class="main-container">
       <ALayoutHeader :style="{ position: 'sticky', top: '0', zIndex: 10, width: '100%' }">
-        <HeaderLayout @click-un-fold="drawer_visible = true" />
+        <HeaderLayout @click-un-fold="drawerVisible = true" />
       </ALayoutHeader>
 
       <ALayoutContent>
@@ -86,8 +99,18 @@ provide('breadList', breadList)
 
 <style lang="less" scoped>
 .layout-sider {
-  @media (max-width: 600px) {
-    display: none;
+  background-color: #021629 !important;
+  border-right: none !important;
+
+  :deep(.ant-layout-sider-trigger) {
+    background-color: #021629 !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.85) !important;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: white !important;
+    }
   }
 }
 
@@ -139,6 +162,18 @@ body {
 
 .ant-layout-header {
   padding: 0 !important;
+  background-color: #021629 !important;
+  color: white !important;
+
+  /* Memastikan elemen dalam header juga menggunakan warna yang sesuai */
+  .ant-menu {
+    background-color: #021629 !important;
+    color: white !important;
+  }
+
+  .ant-btn {
+    color: white !important;
+  }
 }
 
 .ant-layout-sider {
@@ -147,6 +182,15 @@ body {
   }
 
   box-shadow: 2px 0 8px rgba(29, 35, 41, 0.05);
+  background-color: #021629 !important;
+
+  .ant-layout-sider-children {
+    background-color: #021629 !important;
+  }
+
+  .ant-layout-sider-trigger {
+    background-color: #021629 !important;
+  }
 }
 
 .ant-drawer-body {
@@ -202,6 +246,25 @@ body {
 @media (orientation: portrait) {
   .full-screen-wrapper {
     padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+  }
+}
+
+/* Mode Dark */
+.dark {
+  .ant-layout-sider {
+    background-color: #141414 !important;
+    
+    .ant-layout-sider-children {
+      background-color: #141414 !important;
+    }
+
+    .ant-layout-sider-trigger {
+      background-color: #141414 !important;
+    }
+  }
+
+  .ant-layout-header {
+    background-color: #141414 !important;
   }
 }
 </style>

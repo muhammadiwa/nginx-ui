@@ -4,7 +4,6 @@ import gettext from '@/gettext'
 import { useSettingsStore } from '@/pinia'
 import { theme } from 'ant-design-vue'
 import en_US from 'ant-design-vue/es/locale/en_US'
-
 import zh_CN from 'ant-design-vue/es/locale/zh_CN'
 import zh_TW from 'ant-design-vue/es/locale/zh_TW'
 // This starter template is using Vue 3 <script setup> SFCs
@@ -99,6 +98,7 @@ loadTranslations(route)
 .ant-layout-header {
   padding: 0 !important;
   background-color: #fff !important;
+  // background: linear-gradient(90deg, #D26513 0%, #FAA018 50%, #B9731E 100%) !important;
 }
 
 .ant-layout-sider {

@@ -1,15 +1,22 @@
 <script setup lang="ts">
-import logo from '@/assets/img/logo.png'
+import logo from '@/assets/img/logo-primadigi.png'
+
+const props = defineProps({
+  collapsed: {
+    type: Boolean,
+    default: false
+  }
+})
 </script>
 
 <template>
-  <div class="logo">
+  <div class="logo" :class="{ 'collapsed': collapsed }">
     <img
       :src="logo"
       alt="logo"
     >
-    <p class="text">
-      Nginx UI
+    <p class="text" v-if="!collapsed">
+      PrimeWaf
     </p>
   </div>
 </template>
@@ -17,30 +24,46 @@ import logo from '@/assets/img/logo.png'
 <style lang="less" scoped>
 .dark {
   .logo {
-    background-color: transparent;
-    -webkit-box-shadow: 1px 1px 0 0 #404040;
-    box-shadow: 1px 1px 0 0 #404040;
+    background-color: transparent !important;
+    box-shadow: none !important;
   }
 }
 
 .logo {
-  -webkit-box-shadow: 1px 1px 0 0 #e8e8e8;
-  box-shadow: 1px 1px 0 0 #e8e8e8;
+  box-shadow: none;
   transition: all 0.3s;
   height: 64px;
   width: 100%;
   overflow: hidden;
-  background-color: #ffffff;
+  background-color: transparent !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+
+  &.collapsed {
+    padding: 0 8px;
+    justify-content: center;
+  }
 
   img {
-    height: 46px;
+    height: 32px;
+    width: auto;
+    margin-right: 8px;
+    transition: all 0.3s;
+  }
+
+  &.collapsed img {
+    margin-right: 0;
   }
 
   p.text {
     margin: 0;
-    font-size: 22px;
-    line-height: 48px;
-    height: 48px;
+    font-size: 20px;
+    color: white;
+    font-weight: 500;
+    transition: all 0.3s;
+    white-space: nowrap;
   }
 }
 </style>

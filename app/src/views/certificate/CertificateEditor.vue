@@ -52,7 +52,6 @@ async function save() {
   // eslint-disable-next-line ts/no-explicit-any
   catch (e: any) {
     errors.value = e.errors
-    message.error($gettext(e?.message ?? 'Server error'))
     throw e
   }
 }
@@ -63,7 +62,7 @@ const log = computed(() => {
   const logs = data.value.log?.split('\n')
 
   logs.forEach((line, idx, lines) => {
-    const regex = /\[Nginx UI\] (.*)/
+    const regex = /\[PrimeWaf\] (.*)/
 
     const matches = line.match(regex)
 
@@ -90,7 +89,7 @@ const isManaged = computed(() => {
     >
       <div class="mb-2">
         <AAlert
-          :message="$gettext('This certificate is managed by Nginx UI')"
+          :message="$gettext('This certificate is managed by PrimeWaf')"
           type="success"
           show-icon
         />

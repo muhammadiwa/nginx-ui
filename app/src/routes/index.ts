@@ -81,55 +81,55 @@ export const routes: RouteRecordRaw[] = [
           },
         }],
       },
-      {
-        path: 'streams',
-        name: 'Manage Streams',
-        component: () => import('@/views/stream/StreamList.vue'),
-        meta: {
-          name: () => $gettext('Manage Streams'),
-          icon: ShareAltOutlined,
-        },
-      },
-      {
-        path: 'stream/:name',
-        name: 'Edit Stream',
-        component: () => import('@/views/stream/StreamEdit.vue'),
-        meta: {
-          name: () => $gettext('Edit Stream'),
-          hiddenInSidebar: true,
-          lastRouteName: 'Manage Streams',
-        },
-      },
-      {
-        path: 'config',
-        name: 'Manage Configs',
-        component: () => import('@/views/config/ConfigList.vue'),
-        meta: {
-          name: () => $gettext('Manage Configs'),
-          icon: FileOutlined,
-          hideChildren: true,
-        },
-      },
-      {
-        path: 'config/add',
-        name: 'Add Configuration',
-        component: () => import('@/views/config/ConfigEditor.vue'),
-        meta: {
-          name: () => $gettext('Add Configuration'),
-          hiddenInSidebar: true,
-          lastRouteName: 'Manage Configs',
-        },
-      },
-      {
-        path: 'config/:name+/edit',
-        name: 'Edit Configuration',
-        component: () => import('@/views/config/ConfigEditor.vue'),
-        meta: {
-          name: () => $gettext('Edit Configuration'),
-          hiddenInSidebar: true,
-          lastRouteName: 'Manage Configs',
-        },
-      },
+      // {
+      //   path: 'streams',
+      //   name: 'Manage Streams',
+      //   component: () => import('@/views/stream/StreamList.vue'),
+      //   meta: {
+      //     name: () => $gettext('Manage Streams'),
+      //     icon: ShareAltOutlined,
+      //   },
+      // },
+      // {
+      //   path: 'stream/:name',
+      //   name: 'Edit Stream',
+      //   component: () => import('@/views/stream/StreamEdit.vue'),
+      //   meta: {
+      //     name: () => $gettext('Edit Stream'),
+      //     hiddenInSidebar: true,
+      //     lastRouteName: 'Manage Streams',
+      //   },
+      // },
+      // {
+      //   path: 'config',
+      //   name: 'Manage Configs',
+      //   component: () => import('@/views/config/ConfigList.vue'),
+      //   meta: {
+      //     name: () => $gettext('Manage Configs'),
+      //     icon: FileOutlined,
+      //     hideChildren: true,
+      //   },
+      // },
+      // {
+      //   path: 'config/add',
+      //   name: 'Add Configuration',
+      //   component: () => import('@/views/config/ConfigEditor.vue'),
+      //   meta: {
+      //     name: () => $gettext('Add Configuration'),
+      //     hiddenInSidebar: true,
+      //     lastRouteName: 'Manage Configs',
+      //   },
+      // },
+      // {
+      //   path: 'config/:name+/edit',
+      //   name: 'Edit Configuration',
+      //   component: () => import('@/views/config/ConfigEditor.vue'),
+      //   meta: {
+      //     name: () => $gettext('Edit Configuration'),
+      //     hiddenInSidebar: true,
+      //     lastRouteName: 'Manage Configs',
+      //   },
+      // },
       {
         path: 'certificates',
         name: 'Certificates',
@@ -186,52 +186,52 @@ export const routes: RouteRecordRaw[] = [
           },
         ],
       },
+      // {
+      //   path: 'terminal',
+      //   name: 'Terminal',
+      //   component: () => import('@/views/terminal/Terminal.vue'),
+      //   meta: {
+      //     name: () => $gettext('Terminal'),
+      //     icon: CodeOutlined,
+      //   },
+      // },
+      // {
+      //   path: 'nginx_log',
+      //   name: 'Nginx Log',
+      //   meta: {
+      //     name: () => $gettext('Nginx Log'),
+      //     icon: FileTextOutlined,
+      //   },
+      //   children: [{
+      //     path: 'access',
+      //     name: 'Access Logs',
+      //     component: () => import('@/views/nginx_log/NginxLog.vue'),
+      //     meta: {
+      //       name: () => $gettext('Access Logs'),
+      //     },
+      //   }, {
+      //     path: 'error',
+      //     name: 'Error Logs',
+      //     component: () => import('@/views/nginx_log/NginxLog.vue'),
+      //     meta: {
+      //       name: () => $gettext('Error Logs'),
+      //     },
+      //   }, {
+      //     path: 'site',
+      //     name: 'Site Logs',
+      //     component: () => import('@/views/nginx_log/NginxLog.vue'),
+      //     meta: {
+      //       name: () => $gettext('Site Logs'),
+      //       hiddenInSidebar: true,
+      //     },
+      //   }],
+      // },
       {
-        path: 'terminal',
-        name: 'Terminal',
-        component: () => import('@/views/terminal/Terminal.vue'),
-        meta: {
-          name: () => $gettext('Terminal'),
-          icon: CodeOutlined,
-        },
-      },
-      {
-        path: 'nginx_log',
-        name: 'Nginx Log',
-        meta: {
-          name: () => $gettext('Nginx Log'),
-          icon: FileTextOutlined,
-        },
-        children: [{
-          path: 'access',
-          name: 'Access Logs',
-          component: () => import('@/views/nginx_log/NginxLog.vue'),
-          meta: {
-            name: () => $gettext('Access Logs'),
-          },
-        }, {
-          path: 'error',
-          name: 'Error Logs',
-          component: () => import('@/views/nginx_log/NginxLog.vue'),
-          meta: {
-            name: () => $gettext('Error Logs'),
-          },
-        }, {
-          path: 'site',
-          name: 'Site Logs',
-          component: () => import('@/views/nginx_log/NginxLog.vue'),
-          meta: {
-            name: () => $gettext('Site Logs'),
-            hiddenInSidebar: true,
-          },
-        }],
-      },
-      {
-        path: 'environment',
-        name: 'Environment',
+        path: 'environments',
+        name: 'Environments',
         component: () => import('@/views/environment/Environment.vue'),
         meta: {
-          name: () => $gettext('Environment'),
+          name: () => $gettext('Environments'),
           icon: DatabaseOutlined,
           hiddenInSidebar: (): boolean => {
             const settings = useSettingsStore()
@@ -268,41 +268,61 @@ export const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: 'system',
-        name: 'System',
-        redirect: 'system/about',
+        path: 'security-logs',
+        name: 'security-logs',
+        component: () => import('@/views/logs/SecurityLogs.vue'),
         meta: {
-          name: () => $gettext('System'),
-          icon: InfoCircleOutlined,
+          name: () => $gettext('Security Logs'),
+          icon: SettingOutlined,
         },
-        children: [{
-          path: 'self_check',
-          name: 'Self Check',
-          component: () => import('@/views/system/SelfCheck/SelfCheck.vue'),
-          meta: {
-            name: () => $gettext('Self Check'),
-          },
-        }, {
-          path: 'about',
-          name: 'About',
-          component: () => import('@/views/system/About.vue'),
-          meta: {
-            name: () => $gettext('About'),
-          },
-        }, {
-          path: 'upgrade',
-          name: 'Upgrade',
-          component: () => import('@/views/system/Upgrade.vue'),
-          meta: {
-            name: () => $gettext('Upgrade'),
-            hiddenInSidebar: (): boolean => {
-              const settings = useSettingsStore()
-
-              return settings.is_remote
-            },
-          },
-        }],
       },
+      // {
+      //   path: 'waf',
+      //   name: 'Waf',
+      //   component: () => import('@/views/waf/Waf.vue'),
+      //   meta: {
+      //     name: () => $gettext('Web Application Firewall'),
+      //     icon: SecurityScanOutlined,
+      //   },
+      // },
+      // {
+      //   path: 'system',
+      //   name: 'System',
+      //   redirect: 'system/about',
+      //   meta: {
+      //     name: () => $gettext('System'),
+      //     icon: InfoCircleOutlined,
+      //   },
+      //   children: [{
+      //     path: 'self_check',
+      //     name: 'Self Check',
+      //     component: () => import('@/views/system/SelfCheck/SelfCheck.vue'),
+      //     meta: {
+      //       name: () => $gettext('Self Check'),
+      //     },
+      //   }
+        // , {
+        //   path: 'about',
+        //   name: 'About',
+        //   component: () => import('@/views/system/About.vue'),
+        //   meta: {
+        //     name: () => $gettext('About'),
+        //   },
+        // }, {
+        //   path: 'upgrade',
+        //   name: 'Upgrade',
+        //   component: () => import('@/views/system/Upgrade.vue'),
+        //   meta: {
+        //     name: () => $gettext('Upgrade'),
+        //     hiddenInSidebar: (): boolean => {
+        //       const settings = useSettingsStore()
+
+        //       return settings.is_remote
+        //     },
+        //   },
+        // }
+      // ],
+      // },
     ],
   },
   {
@@ -333,7 +353,7 @@ const router = createRouter({
 const nprogress = useNProgress()
 
 router.beforeEach((to, _, next) => {
-  document.title = `${to?.meta.name?.() ?? ''} | Nginx UI`
+  document.title = `${to?.meta.name?.() ?? ''} | PrimeWaf`
 
   nprogress.start()
 

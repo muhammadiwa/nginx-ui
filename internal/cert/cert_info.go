@@ -3,11 +3,11 @@ package cert
 import (
 	"crypto/x509"
 	"encoding/pem"
-	"github.com/0xJacky/Nginx-UI/internal/helper"
-	"github.com/0xJacky/Nginx-UI/internal/nginx"
-	"github.com/pkg/errors"
 	"os"
 	"time"
+
+	"github.com/0xJacky/Nginx-UI/internal/helper"
+	"github.com/0xJacky/Nginx-UI/internal/nginx"
 )
 
 type Info struct {
@@ -19,29 +19,40 @@ type Info struct {
 
 func GetCertInfo(sslCertificatePath string) (info *Info, err error) {
 	if !helper.IsUnderDirectory(sslCertificatePath, nginx.GetConfPath()) {
-		err = errors.New("ssl certificate path is not under the nginx conf path")
+		err = ErrCertPathIsNotUnderTheNginxConfDir
 		return
 	}
+
 	certData, err := os.ReadFile(sslCertificatePath)
 	if err != nil {
-		err = errors.Wrap(err, "error read certificate")
 		return
 	}
 
 	block, _ := pem.Decode(certData)
 	if block == nil || block.Type != "CERTIFICATE" {
-		err = errors.New("certificate decoding error")
+		err = ErrCertDecode
 		return
 	}
 
 	cert, err := x509.ParseCertificate(block.Bytes)
 	if err != nil {
-		err = errors.Wrap(err, "certificate parsing error")
+		err = ErrCertParse
 		return
 	}
 
+	// for wildcard certificate, the subject name is the first DNS name
+	subjectName := cert.Subject.CommonName
+	if subjectName == "" {
+		for _, name := range cert.DNSNames {
+			if name != "" {
+				subjectName = name
+				break
+			}
+		}
+	}
+
 	info = &Info{
-		SubjectName: cert.Subject.CommonName,
+		SubjectName: subjectName,
 		IssuerName:  cert.Issuer.CommonName,
 		NotAfter:    cert.NotAfter,
 		NotBefore:   cert.NotBefore,

@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import type { Environment } from '@/api/environment'
-import type { Ref } from 'vue'
-import upgrade, { type RuntimeInfo } from '@/api/upgrade'
+import type { RuntimeInfo } from '@/api/upgrade'
+import upgrade from '@/api/upgrade'
 import websocket from '@/lib/websocket'
-import { message } from 'ant-design-vue'
 import _ from 'lodash'
 import { marked } from 'marked'
-import { useRoute } from 'vue-router'
 
 const route = useRoute()
 const visible = ref(false)
@@ -16,9 +14,9 @@ const channel = ref('stable')
 const nodeNames = computed(() => nodes.value.map(v => v.name).join(', '))
 const loading = ref(false)
 
-const data = ref({
+const data = ref<RuntimeInfo>({
   name: '',
-}) as Ref<RuntimeInfo>
+} as RuntimeInfo)
 
 const modalVisible = ref(false)
 const modalClosable = ref(false)
@@ -56,7 +54,6 @@ function getLatestRelease() {
     data.value = r
   }).catch(e => {
     getReleaseError.value = e?.message
-    message.error(e?.message ?? $gettext('Server error'))
   }).finally(() => {
     loading.value = false
   })
@@ -88,7 +85,7 @@ async function performUpgrade() {
   progressPercent.value = 0
   logContainer.value!.innerHTML = ''
 
-  log($gettext('Upgrading Nginx UI, please wait...'))
+  log($gettext('Upgrading PrimeWaf, please wait...'))
 
   const nodesNum = nodes.value.length
 
@@ -137,7 +134,7 @@ async function performUpgrade() {
 
         progressPercent.value = 100 * ((i + 1) / nodesNum)
         if (!isFailed)
-          log($gettext('Upgraded Nginx UI on %{node} successfully 🎉', { node: nodes.value[i].name }))
+          log($gettext('Upgraded PrimeWaf on %{node} successfully 🎉', { node: nodes.value[i].name }))
 
         if (i + 1 === nodesNum) {
           progressStatus.value = 'success'
@@ -182,7 +179,7 @@ async function performUpgrade() {
         banner
       />
       <template v-else>
-        <p>{{ $gettext('This will upgrade or reinstall the Nginx UI on %{nodeNames} to %{version}.', { nodeNames, version: data.name }) }}</p>
+        <p>{{ $gettext('This will upgrade or reinstall the PrimeWaf on %{nodeNames} to %{version}.', { nodeNames, version: data.name }) }}</p>
 
         <AAlert
           v-if="dryRun"

@@ -14,24 +14,18 @@ const passkeyEnabled = ref(false)
 const regLoading = ref(false)
 async function registerPasskey() {
   regLoading.value = true
-  try {
-    const optionsJSON = await passkey.begin_registration()
+  const optionsJSON = await passkey.begin_registration()
 
-    const attestationResponse = await startRegistration({ optionsJSON })
+  const attestationResponse = await startRegistration({ optionsJSON })
 
-    await passkey.finish_registration(attestationResponse, passkeyName.value)
+  await passkey.finish_registration(attestationResponse, passkeyName.value)
 
-    emit('created')
+  emit('created')
 
-    message.success($gettext('Register passkey successfully'))
-    addPasskeyModelOpen.value = false
+  message.success($gettext('Register passkey successfully'))
+  addPasskeyModelOpen.value = false
 
-    user.passkeyRawId = attestationResponse.rawId
-  }
-  // eslint-disable-next-line ts/no-explicit-any
-  catch (e: any) {
-    message.error($gettext(e.message ?? 'Server error'))
-  }
+  user.passkeyRawId = attestationResponse.rawId
   regLoading.value = false
 }
 
@@ -93,12 +87,12 @@ passkey.get_config_status().then(r => {
             <p>{{ $gettext('You have not configured the settings of Webauthn, so you cannot add a passkey.') }}</p>
             <p>
               {{ $gettext('To ensure security, Webauthn configuration cannot be added through the UI. '
-                + 'Please manually configure the following in the app.ini configuration file and restart Nginx UI.') }}
+                + 'Please manually configure the following in the app.ini configuration file and restart PrimeWaf.') }}
             </p>
             <pre>[webauthn]
 # This is the display name
-RPDisplayName = Nginx UI
-# The domain name of Nginx UI
+RPDisplayName = PrimeWaf
+# The domain name of PrimeWaf
 RPID          = localhost
 # The list of origin addresses
 RPOrigins     = http://localhost:3002</pre>

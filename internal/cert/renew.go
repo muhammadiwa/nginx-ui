@@ -1,16 +1,17 @@
 package cert
 
 import (
+	"log"
+
 	"github.com/0xJacky/Nginx-UI/model"
 	"github.com/go-acme/lego/v4/certificate"
 	"github.com/go-acme/lego/v4/lego"
 	"github.com/pkg/errors"
-	"log"
 )
 
 func renew(payload *ConfigPayload, client *lego.Client, l *log.Logger, errChan chan error) {
 	if payload.Resource == nil {
-		errChan <- errors.New("resource is nil")
+		errChan <- ErrPayloadResourceIsNil
 		return
 	}
 
@@ -35,5 +36,5 @@ func renew(payload *ConfigPayload, client *lego.Client, l *log.Logger, errChan c
 
 	payload.WriteFile(l, errChan)
 
-	l.Println("[INFO] [Nginx UI] Certificate renewed successfully")
+	l.Println("[INFO] [PrimeWaf] Certificate renewed successfully")
 }

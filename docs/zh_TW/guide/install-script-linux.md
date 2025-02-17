@@ -6,7 +6,7 @@
 
 ### `install.sh install`
 
-安裝或更新 Nginx UI。
+安裝或更新 PrimeWaf。
 
 ### 用法
 
@@ -18,7 +18,7 @@ install.sh install [OPTIONS]
 
 | 選項                    |                                                                                       |
 |-----------------------|---------------------------------------------------------------------------------------|
-| `-l, --local <file>`  | 從本地檔案安裝 Nginx UI (`string`)                                                           |
+| `-l, --local <file>`  | 從本地檔案安裝 PrimeWaf (`string`)                                                           |
 | `-p, --proxy <url>`   | 透過代理伺服器下載 (`string`)<br/>例如：`-p http://127.0.0.1:8118` 或 `-p socks5://127.0.0.1:1080` |
 | `-r, --reverse-proxy` | 透過反向代理伺服器下載 (`string`)<br/>例如：`-r https://mirror.ghproxy.com/`                               |
 
@@ -26,17 +26,17 @@ install.sh install [OPTIONS]
 ### 快速使用
 
 ```shell
-bash <(curl -L -s https://raw.githubusercontent.com/0xJacky/nginx-ui/main/install.sh) install
+bash -c "$(curl -L https://raw.githubusercontent.com/0xJacky/nginx-ui/main/install.sh)" @ install
 ```
 
 安裝指令碼預設的監聽埠為 `9000`，HTTP Challenge 埠預設為 `9180`。如果出現埠衝突請修改 `/usr/local/etc/nginx-ui/app.ini`，
-並使用 `systemctl restart nginx-ui` 重啟 Nginx UI 守護行程。更多有關資訊，請檢視 [配置參考](./config-server)。
+並使用 `systemctl restart nginx-ui` 重啟 PrimeWaf 守護行程。更多有關資訊，請檢視 [配置參考](./config-server)。
 
 ## 解除安裝
 
 ### `install.sh remove`
 
-解除安裝 Nginx UI。
+解除安裝 PrimeWaf。
 
 ### 用法
 
@@ -48,20 +48,20 @@ install.sh remove [OPTIONS]
 
 | 選項        |                                       |
 |-----------|---------------------------------------|
-| `--purge` | 刪除所有 Nginx UI 檔案，包括日誌、配置等 (`boolean`) |
+| `--purge` | 刪除所有 PrimeWaf 檔案，包括日誌、配置等 (`boolean`) |
 
 ### 快速使用
 
 ::: code-group
 
 ```shell [移除]
-# 解除安裝 Nginx UI 但保留配置和資料庫檔案
-bash <(curl -L -s https://raw.githubusercontent.com/0xJacky/nginx-ui/main/install.sh) remove
+# 解除安裝 PrimeWaf 但保留配置和資料庫檔案
+bash -c "$(curl -L https://raw.githubusercontent.com/0xJacky/nginx-ui/main/install.sh)" @ remove
 ```
 
 ```shell [清除]
-# 解除安裝並刪除所有 Nginx UI 檔案，包括配置和資料庫檔案
-bash <(curl -L -s https://raw.githubusercontent.com/0xJacky/nginx-ui/main/install.sh) remove --purge
+# 解除安裝並刪除所有 PrimeWaf 檔案，包括配置和資料庫檔案
+bash -c "$(curl -L https://raw.githubusercontent.com/0xJacky/nginx-ui/main/install.sh)" @ remove --purge
 ```
 
 :::
@@ -81,12 +81,12 @@ install.sh help
 ### 快速使用
 
 ```shell
-bash <(curl -L -s https://raw.githubusercontent.com/0xJacky/nginx-ui/main/install.sh) help
+bash -c "$(curl -L https://raw.githubusercontent.com/0xJacky/nginx-ui/main/install.sh)" @ help
 ```
 
 ## 控制服務
 
-透過此指令碼，Nginx UI 將作為 `nginx-ui` 守護行程安裝在 systemd 中。請使用以下 `systemctl` 指令控制。
+透過此指令碼，PrimeWaf 將作為 `nginx-ui` 守護行程安裝在 systemd 中。請使用以下 `systemctl` 指令控制。
 
 ::: code-group
 
