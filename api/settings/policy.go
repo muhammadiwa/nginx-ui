@@ -1,53 +1,69 @@
 package settings
 
 import (
+	"fmt"
 	"io/ioutil"
 	"net/http"
-	"strings"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
 
-const policyPath = "/etc/cp/conf/local_policy.yaml"
+const PolicyPath = "/etc/cp/conf/local_policy.yaml"
 
-func GetLocalPolicy(c *gin.Context) {
-	// Baca file local_policy.yaml
-	data, err := ioutil.ReadFile(policyPath)
+// InitPolicyRouter initializes the policy routes
+func InitPolicyRouter(r *gin.RouterGroup) {
+	r.GET("/policy", GetPolicy)
+	r.POST("/policy", SavePolicy)
+}
+
+// GetPolicy handles retrieving the policy file content
+func GetPolicy(c *gin.Context) {
+	content, err := ioutil.ReadFile(PolicyPath)
 	if err != nil {
+		if os.IsNotExist(err) {
+			// If file doesn't exist, create it with default content
+			defaultContent := "# Default policy configuration\n"
+			err = ioutil.WriteFile(PolicyPath, []byte(defaultContent), 0644)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{
+					"error": fmt.Sprintf("Failed to create policy file: %v", err),
+				})
+				return
+			}
+			c.JSON(http.StatusOK, gin.H{
+				"content": defaultContent,
+			})
+			return
+		}
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Failed to read policy file",
-			"details": err.Error(),
+			"error": fmt.Sprintf("Failed to read policy file: %v", err),
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"content": string(data),
-		"path": policyPath,
+		"content": string(content),
 	})
 }
 
-func SaveLocalPolicy(c *gin.Context) {
+// SavePolicy handles saving new content to the policy file
+func SavePolicy(c *gin.Context) {
 	var req struct {
 		Content string `json:"content" binding:"required"`
 	}
-	if err := c.BindJSON(&req); err != nil {
+
+	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Invalid request format",
-			"details": err.Error(),
 		})
 		return
 	}
 
-	// Hapus spasi di awal baris jika ada
-	content := strings.TrimSpace(req.Content)
-
-	// Tulis ke file
-	err := ioutil.WriteFile(policyPath, []byte(content), 0644)
+	err := ioutil.WriteFile(PolicyPath, []byte(req.Content), 0644)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Failed to save policy file",
-			"details": err.Error(),
+			"error": fmt.Sprintf("Failed to save policy file: %v", err),
 		})
 		return
 	}

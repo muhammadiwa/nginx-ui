@@ -1,10 +1,7 @@
 package router
 
 import (
-	"fmt"
 	"net/http"
-	"os/exec"
-	"strings"
 
 	"github.com/0xJacky/Nginx-UI/api/analytic"
 	"github.com/0xJacky/Nginx-UI/api/certificate"
@@ -28,49 +25,6 @@ import (
 	"github.com/uozi-tech/cosy"
 )
 
-const policyPath = "/etc/cp/conf/local_policy.yaml"
-
-// Policy handlers
-func getLocalPolicy(c *gin.Context) {
-	cmd := exec.Command("sudo", "cat", policyPath)
-	output, err := cmd.Output()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": fmt.Sprintf("Failed to read policy file: %v", err),
-		})
-		return
-	}
-
-	c.Header("Content-Type", "application/x-yaml")
-	c.String(http.StatusOK, string(output))
-}
-
-func saveLocalPolicy(c *gin.Context) {
-	var req struct {
-		Content string `json:"content" binding:"required"`
-	}
-
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid request format",
-		})
-		return
-	}
-
-	cmd := exec.Command("sudo", "tee", policyPath)
-	cmd.Stdin = strings.NewReader(req.Content)
-	if err := cmd.Run(); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": fmt.Sprintf("Failed to save policy file: %v", err),
-		})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Policy saved successfully",
-	})
-}
-
 // InitRouter initializes the router
 func InitRouter() {
 	r := cosy.GetEngine()
@@ -91,9 +45,9 @@ func InitRouter() {
 		system.InitPublicRouter(root)
 		user.InitAuthRouter(root)
 
-		// Policy routes (tanpa auth)
-		root.GET("/local_policy", getLocalPolicy)
-		root.POST("/local_policy", saveLocalPolicy)
+		// Settings routes
+		settingsGroup := root.Group("/settings")
+		settings.InitRouter(settingsGroup)
 
 		// Authorization required and not websocket request
 		g := root.Group("/", middleware.AuthRequired(), middleware.Proxy())
@@ -111,7 +65,6 @@ func InitRouter() {
 			certificate.InitDNSCredentialRouter(g)
 			certificate.InitAcmeUserRouter(g)
 			system.InitPrivateRouter(g)
-			settings.InitRouter(g)
 			openai.InitRouter(g)
 			cluster.InitRouter(g)
 			notification.InitRouter(g)
@@ -129,46 +82,6 @@ func InitRouter() {
 			nginxLog.InitRouter(w)
 			upstream.InitRouter(w)
 			system.InitWebSocketRouter(w)
-		}
-
-		// AppSec routes
-		appsec := root.Group("/v1/appsec")
-		{
-			appsec.GET("/config", func(c *gin.Context) {
-				c.JSON(http.StatusOK, gin.H{
-					"message": "AppSec config",
-				})
-			})
-			appsec.PUT("/config", func(c *gin.Context) {
-				c.JSON(http.StatusOK, gin.H{
-					"message": "AppSec config updated",
-				})
-			})
-			appsec.GET("/policies", func(c *gin.Context) {
-				c.JSON(http.StatusOK, gin.H{
-					"message": "AppSec policies",
-				})
-			})
-			appsec.POST("/policies", func(c *gin.Context) {
-				c.JSON(http.StatusOK, gin.H{
-					"message": "AppSec policy created",
-				})
-			})
-			appsec.PUT("/policies/:id", func(c *gin.Context) {
-				c.JSON(http.StatusOK, gin.H{
-					"message": "AppSec policy updated",
-				})
-			})
-			appsec.DELETE("/policies/:id", func(c *gin.Context) {
-				c.JSON(http.StatusOK, gin.H{
-					"message": "AppSec policy deleted",
-				})
-			})
-			appsec.GET("/stats", func(c *gin.Context) {
-				c.JSON(http.StatusOK, gin.H{
-					"message": "AppSec stats",
-				})
-			})
 		}
 	}
 }

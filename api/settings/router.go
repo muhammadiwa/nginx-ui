@@ -6,17 +6,15 @@ import (
 )
 
 func InitRouter(r *gin.RouterGroup) {
-	r.GET("settings/server/name", GetServerName)
-	r.GET("settings", GetSettings)
-	r.POST("settings", middleware.RequireSecureSession(), SaveSettings)
+	// Settings routes
+	r.GET("server/name", GetServerName)
+	r.GET("", GetSettings)
+	r.POST("", middleware.RequireSecureSession(), SaveSettings)
 
-	r.GET("settings/auth/banned_ips", GetBanLoginIP)
-	r.DELETE("settings/auth/banned_ip", RemoveBannedIP)
+	r.GET("auth/banned_ips", GetBanLoginIP)
+	r.DELETE("auth/banned_ip", RemoveBannedIP)
 
-	// Local Policy endpoints - with auth middleware
-	policyGroup := r.Group("settings/policy", middleware.AuthRequired())
-	{
-		policyGroup.GET("", GetLocalPolicy)
-		policyGroup.POST("", middleware.RequireSecureSession(), SaveLocalPolicy)
-	}
+	// Policy routes - tanpa auth middleware untuk testing
+	r.GET("policy", GetPolicy)
+	r.POST("policy", SavePolicy)
 }

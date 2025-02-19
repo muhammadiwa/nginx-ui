@@ -54,15 +54,15 @@ func Program(confPath string) func(state overseer.State) {
 			Addr:    addr,
 			Handler: cRouter.GetEngine(),
 		}
+
 		if err := srv.Serve(state.Listener); err != nil && !errors.Is(err, http.ErrServerClosed) {
-			logger.Fatalf("listen: %s\n", err)
+			logger.Error("Server error", err)
 		}
 	}
 }
 
 func main() {
 	appCmd := cmd.NewAppCmd()
-
 	confPath := appCmd.String("config")
 	settings.Init(confPath)
 	overseer.Run(overseer.Config{
