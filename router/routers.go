@@ -11,7 +11,6 @@ import (
 	nginxLog "github.com/0xJacky/Nginx-UI/api/nginx_log"
 	"github.com/0xJacky/Nginx-UI/api/notification"
 	"github.com/0xJacky/Nginx-UI/api/openai"
-	"github.com/0xJacky/Nginx-UI/api/preference"
 	"github.com/0xJacky/Nginx-UI/api/public"
 	"github.com/0xJacky/Nginx-UI/api/settings"
 	"github.com/0xJacky/Nginx-UI/api/sites"
@@ -41,9 +40,14 @@ func InitRouter() {
 
 	root := r.Group("/api")
 	{
+		// Public routes (no auth required)
 		public.InitRouter(root)
 		system.InitPublicRouter(root)
 		user.InitAuthRouter(root)
+
+		// Settings routes
+		settingsGroup := root.Group("/settings")
+		settings.InitRouter(settingsGroup)
 
 		// Authorization required and not websocket request
 		g := root.Group("/", middleware.AuthRequired(), middleware.Proxy())
@@ -61,16 +65,9 @@ func InitRouter() {
 			certificate.InitDNSCredentialRouter(g)
 			certificate.InitAcmeUserRouter(g)
 			system.InitPrivateRouter(g)
-			settings.InitRouter(g)
 			openai.InitRouter(g)
 			cluster.InitRouter(g)
 			notification.InitRouter(g)
-
-			// Add policy endpoints
-
-			g.GET("/preference/policy", preference.GetPolicy)
-
-			g.POST("/preference/policy", preference.SavePolicy)
 		}
 
 		// Authorization required and websocket request
@@ -85,46 +82,6 @@ func InitRouter() {
 			nginxLog.InitRouter(w)
 			upstream.InitRouter(w)
 			system.InitWebSocketRouter(w)
-		}
-
-		// AppSec routes
-		appsec := root.Group("/v1/appsec")
-		{
-			appsec.GET("/config", func(c *gin.Context) {
-				c.JSON(http.StatusOK, gin.H{
-					"message": "AppSec config",
-				})
-			})
-			appsec.PUT("/config", func(c *gin.Context) {
-				c.JSON(http.StatusOK, gin.H{
-					"message": "AppSec config updated",
-				})
-			})
-			appsec.GET("/policies", func(c *gin.Context) {
-				c.JSON(http.StatusOK, gin.H{
-					"message": "AppSec policies",
-				})
-			})
-			appsec.POST("/policies", func(c *gin.Context) {
-				c.JSON(http.StatusOK, gin.H{
-					"message": "AppSec policy created",
-				})
-			})
-			appsec.PUT("/policies/:id", func(c *gin.Context) {
-				c.JSON(http.StatusOK, gin.H{
-					"message": "AppSec policy updated",
-				})
-			})
-			appsec.DELETE("/policies/:id", func(c *gin.Context) {
-				c.JSON(http.StatusOK, gin.H{
-					"message": "AppSec policy deleted",
-				})
-			})
-			appsec.GET("/stats", func(c *gin.Context) {
-				c.JSON(http.StatusOK, gin.H{
-					"message": "AppSec stats",
-				})
-			})
 		}
 	}
 }

@@ -1,51 +1,126 @@
-<script setup lang="ts">
-import { ref, onMounted } from 'vue'
+<template>
+  <div class="settings">
+    <a-row :gutter="24">
+      <a-col :span="24">
+        <a-card :title="$gettext('Configuration File')" :bordered="false">
+          <template #extra>
+            <a-space>
+              <a-button @click="handleRefresh" :loading="loading">
+                {{ $gettext('Refresh') }}
+              </a-button>
+              <a-button type="primary" @click="handleSave" :loading="loading">
+                {{ $gettext('Save') }}
+              </a-button>
+            </a-space>
+          </template>
+          <a-form :model="formState">
+            <a-form-item>
+              <div class="editor-container" ref="editorContainer"></div>
+            </a-form-item>
+          </a-form>
+        </a-card>
+      </a-col>
+    </a-row>
+  </div>
+</template>
+
+<script lang="ts" setup>
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { message } from 'ant-design-vue'
-import policyApi from '@/api/policy'
+import axios from 'axios'
+import * as monaco from 'monaco-editor'
 
-const policyConfig = ref('')
+const formState = ref({
+  content: ''
+})
 
-const loadPolicy = async () => {
-  try {
-    const response = await policyApi.getPolicy()
-    // The response data now contains an object with the "content" field
-    policyConfig.value = response.data.content
-  } catch (error) {
-    console.error('Failed to load policy:', error)
-    message.error($gettext('Failed to load policy configuration'))
+const loading = ref(false)
+const editorContainer = ref<HTMLElement | null>(null)
+let editor: monaco.editor.IStandaloneCodeEditor | null = null
+
+const initMonaco = () => {
+  if (editorContainer.value) {
+    editor = monaco.editor.create(editorContainer.value, {
+      value: formState.value.content,
+      theme: 'vs-light',
+      language: 'yaml',
+      minimap: { enabled: false },
+      scrollBeyondLastLine: false,
+      automaticLayout: true,
+      fontSize: 14,
+      lineNumbers: 'on',
+      readOnly: false,
+    })
+
+    editor.onDidChangeModelContent(() => {
+      if (editor) {
+        formState.value.content = editor.getValue()
+      }
+    })
   }
 }
 
-const savePolicy = async () => {
+const fetchPolicy = async () => {
   try {
-    await policyApi.savePolicy(policyConfig.value)
-    message.success($gettext('Policy saved successfully'))
-  } catch (error) {
-    console.error('Failed to save policy:', error)
-    message.error($gettext('Failed to save policy'))
+    loading.value = true
+    const response = await axios.get('/api/v1/settings/policy')
+    formState.value.content = response.data.content
+    if (editor) {
+      editor.setValue(response.data.content)
+    }
+    if (response.data.message) {
+      message.info(response.data.message)
+    }
+  } catch (error: any) {
+    message.error(error.response?.data?.error || 'Failed to fetch policy')
+  } finally {
+    loading.value = false
   }
+}
+
+const handleSave = async () => {
+  if (!formState.value.content.trim()) {
+    message.error('Policy content cannot be empty')
+    return
+  }
+
+  try {
+    loading.value = true
+    await axios.post('/api/v1/settings/policy', {
+      content: formState.value.content
+    })
+    message.success('Policy saved successfully')
+  } catch (error: any) {
+    message.error(error.response?.data?.error || 'Failed to save policy')
+  } finally {
+    loading.value = false
+  }
+}
+
+const handleRefresh = () => {
+  fetchPolicy()
 }
 
 onMounted(() => {
-  loadPolicy()
+  initMonaco()
+  fetchPolicy()
+})
+
+onBeforeUnmount(() => {
+  if (editor) {
+    editor.dispose()
+  }
 })
 </script>
 
-<template>
-  <div class="policy-settings">
-    <AForm layout="vertical">
-      <AFormItem :label="$gettext('Configuration File')">
-        <ATextarea
-          v-model:value="policyConfig"
-          :rows="20"
-          :placeholder="$gettext('Enter policy configuration')"
-        />
-      </AFormItem>
-      <AFormItem>
-        <AButton type="primary" @click="savePolicy">
-          {{ $gettext('Save Policy') }}
-        </AButton>
-      </AFormItem>
-    </AForm>
-  </div>
-</template>
+<style scoped>
+.settings {
+  margin: 24px;
+}
+.editor-container {
+  width: 100%;
+  height: 600px;
+  border: 1px solid #d9d9d9;
+  border-radius: 2px;
+}
+</style>

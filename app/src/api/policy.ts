@@ -1,13 +1,16 @@
-import { http } from '@/utils/http'
+import request from '@/utils/request'
 
-class PolicyApi {
-  getPolicy() {
-    return http.get('/api/settings/policy')
-  }
-
-  savePolicy(content: string) {
-    return http.post('/api/settings/policy', { content })
-  }
+export const getLocalPolicy = () => {
+  return request({
+    url: '/api/local_policy',
+    method: 'get'
+  })
 }
 
-export default new PolicyApi()
+export const saveLocalPolicy = (content: string) => {
+  return request({
+    url: '/api/local_policy',
+    method: 'post',
+    data: { content }
+  })
+}

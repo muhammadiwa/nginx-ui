@@ -9,6 +9,13 @@ import (
 )
 
 func initUiRoute(r *gin.Engine) {
+	// Add MIME type for .vue files
+	r.Use(func(c *gin.Context) {
+		if strings.HasSuffix(c.Request.URL.Path, ".vue") {
+			c.Header("Content-Type", "text/javascript")
+		}
+	})
+
 	// Serve the frontend static files
 	r.Static("/assets", "./app/dist/assets")
 	r.StaticFile("/favicon.ico", "./app/dist/favicon.ico")
