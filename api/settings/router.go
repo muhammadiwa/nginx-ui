@@ -1,8 +1,8 @@
 package settings
 
 import (
-	"github.com/0xJacky/Nginx-UI/internal/middleware"
 	"github.com/gin-gonic/gin"
+	"github.com/0xJacky/Nginx-UI/internal/middleware"
 )
 
 func InitRouter(r *gin.RouterGroup) {
@@ -13,8 +13,4 @@ func InitRouter(r *gin.RouterGroup) {
 
 	r.GET("auth/banned_ips", GetBanLoginIP)
 	r.DELETE("auth/banned_ip", RemoveBannedIP)
-
-	// Policy routes - tanpa auth middleware untuk testing
-	r.GET("policy", GetPolicy)
-	r.POST("policy", SavePolicy)
 }
