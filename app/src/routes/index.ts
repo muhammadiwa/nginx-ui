@@ -12,6 +12,7 @@ import {
   HomeOutlined,
   InfoCircleOutlined,
   SafetyCertificateOutlined,
+  SecurityScanOutlined,
   SettingOutlined,
   ShareAltOutlined,
   UserOutlined,
@@ -185,6 +186,15 @@ export const routes: RouteRecordRaw[] = [
             },
           },
         ],
+      },
+      {
+        path: 'policy',
+        name: 'Policy',
+        component: () => import('@/views/policy/PolicyConfiguration.vue'),
+        meta: {
+          name: () => $gettext('Policy'),
+          icon: SecurityScanOutlined,
+        },
       },
       // {
       //   path: 'terminal',

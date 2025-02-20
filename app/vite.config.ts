@@ -17,6 +17,40 @@ export default defineConfig(({ mode }) => {
 
   return {
     base: './',
+    server: {
+      host: true,
+      port: Number.parseInt(env.VITE_PORT) || 3002,
+      proxy: {
+        '/api': {
+          target: env.VITE_PROXY_TARGET || 'http://localhost:9000',
+          changeOrigin: true,
+          secure: false,
+          ws: true,
+          timeout: 50000,  // Tambah timeout untuk request lama
+          agent: new Agent({
+            keepAlive: true,  // Aktifkan keepAlive
+            keepAliveMsecs: 1000,
+            maxSockets: 10,
+            timeout: 60000  // Timeout untuk koneksi agent
+          }),
+          onProxyReq(proxyReq, req) {
+            // Hanya set header untuk non-event-stream
+            if (req.headers.accept !== 'text/event-stream') {
+              proxyReq.setHeader('Connection', 'keep-alive')
+              proxyReq.setHeader('Keep-Alive', 'timeout=5, max=1000')
+            } else {
+              proxyReq.setHeader('Cache-Control', 'no-cache')
+              proxyReq.setHeader('Content-Type', 'text/event-stream')
+            }
+          },
+          onProxyReqWs(proxyReq, req, socket) {
+            socket.on('close', () => {
+              proxyReq.destroy()
+            })
+          },
+        },
+      },
+    },
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
@@ -71,33 +105,6 @@ export default defineConfig(({ mode }) => {
             'border-radius-base': '5px',
           },
           javascriptEnabled: true,
-        },
-      },
-    },
-    server: {
-      port: Number.parseInt(env.VITE_PORT) || 3002,
-      proxy: {
-        '/api': {
-          target: env.VITE_PROXY_TARGET || 'http://localhost:9000',
-          changeOrigin: true,
-          secure: false,
-          ws: true,
-          timeout: 5000,
-          agent: new Agent({
-            keepAlive: false,
-          }),
-          onProxyReq(proxyReq, req) {
-            proxyReq.setHeader('Connection', 'keep-alive')
-            if (req.headers.accept === 'text/event-stream') {
-              proxyReq.setHeader('Cache-Control', 'no-cache')
-              proxyReq.setHeader('Content-Type', 'text/event-stream')
-            }
-          },
-          onProxyReqWs(proxyReq, req, socket) {
-            socket.on('close', () => {
-              proxyReq.destroy()
-            })
-          },
         },
       },
     },
