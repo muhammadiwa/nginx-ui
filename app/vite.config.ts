@@ -21,34 +21,20 @@ export default defineConfig(({ mode }) => {
       host: true,
       port: Number.parseInt(env.VITE_PORT) || 3002,
       proxy: {
-        '/api': {
+        '^/api': {
           target: env.VITE_PROXY_TARGET || 'http://localhost:9000',
           changeOrigin: true,
           secure: false,
           ws: true,
-          timeout: 50000,  // Tambah timeout untuk request lama
-          agent: new Agent({
-            keepAlive: true,  // Aktifkan keepAlive
-            keepAliveMsecs: 1000,
-            maxSockets: 10,
-            timeout: 60000  // Timeout untuk koneksi agent
-          }),
-          onProxyReq(proxyReq, req) {
-            // Hanya set header untuk non-event-stream
-            if (req.headers.accept !== 'text/event-stream') {
-              proxyReq.setHeader('Connection', 'keep-alive')
-              proxyReq.setHeader('Keep-Alive', 'timeout=5, max=1000')
-            } else {
-              proxyReq.setHeader('Cache-Control', 'no-cache')
-              proxyReq.setHeader('Content-Type', 'text/event-stream')
-            }
-          },
-          onProxyReqWs(proxyReq, req, socket) {
-            socket.on('close', () => {
-              proxyReq.destroy()
-            })
-          },
-        },
+          configure: (proxy, options) => {
+            proxy.on('error', (err, req, res) => {
+              console.log('proxy error', err);
+            });
+            proxy.on('proxyReq', (proxyReq, req, res) => {
+              proxyReq.setHeader('Connection', 'keep-alive');
+            });
+          }
+        }
       },
     },
     resolve: {

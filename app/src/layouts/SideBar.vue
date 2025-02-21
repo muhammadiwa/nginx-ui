@@ -93,7 +93,7 @@ const visible: ComputedRef<Sidebar[]> = computed(() => {
       v-model:open-keys="openKeys"
       v-model:selected-keys="selectedKey"
       mode="inline"
-      :inline-collapsed="props.collapsed"
+      theme="dark"
     >
       <EnvIndicator />
 
