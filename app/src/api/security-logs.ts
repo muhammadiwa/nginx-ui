@@ -23,6 +23,12 @@ interface SecurityLog {
   suggested_remediation: string
 }
 
+interface LogsFilter {
+  severity?: string;
+  startDate?: string;
+  endDate?: string;
+}
+
 class SecurityLogs {
   protected readonly baseUrl: string
 
@@ -30,16 +36,31 @@ class SecurityLogs {
     this.baseUrl = baseUrl
   }
 
-  getImportantEvents(): Promise<SecurityLog[]> {
-    return http.get(`${this.baseUrl}/important`)
+  getImportantEvents(filter?: LogsFilter): Promise<SecurityLog[]> {
+    const params = new URLSearchParams()
+    if (filter?.severity) params.append('severity', filter.severity)
+    if (filter?.startDate) params.append('startDate', filter.startDate)
+    if (filter?.endDate) params.append('endDate', filter.endDate)
+    
+    return http.get(`${this.baseUrl}/important?${params.toString()}`)
   }
 
-  getAllEvents(): Promise<SecurityLog[]> {
-    return http.get(`${this.baseUrl}/all`)
+  getAllEvents(filter?: LogsFilter): Promise<SecurityLog[]> {
+    const params = new URLSearchParams()
+    if (filter?.severity) params.append('severity', filter.severity)
+    if (filter?.startDate) params.append('startDate', filter.startDate)
+    if (filter?.endDate) params.append('endDate', filter.endDate)
+    
+    return http.get(`${this.baseUrl}/all?${params.toString()}`)
   }
 
-  getNotifications(): Promise<SecurityLog[]> {
-    return http.get(`${this.baseUrl}/notifications`)
+  getNotifications(filter?: LogsFilter): Promise<SecurityLog[]> {
+    const params = new URLSearchParams()
+    if (filter?.severity) params.append('severity', filter.severity)
+    if (filter?.startDate) params.append('startDate', filter.startDate)
+    if (filter?.endDate) params.append('endDate', filter.endDate)
+    
+    return http.get(`${this.baseUrl}/notifications?${params.toString()}`)
   }
 }
 

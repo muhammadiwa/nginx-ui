@@ -1,5 +1,5 @@
 <template>
-  <div class="policy-container">
+  <div class="policy-container" :class="{ 'dark-theme': isDarkMode }">
     <a-row :gutter="16">
       <a-col :span="12">
         <a-card title="Policy Configuration">
@@ -1377,7 +1377,6 @@ ul {
   --background-color-light: #262626;
 }
 
-
 .editor-container.dark-mode {
   background-color: #272822;
 }
@@ -1528,5 +1527,18 @@ ul {
 .description-list li {
   margin: 8px 0;
   line-height: 1.4;
+}
+
+.dark-theme .code-actions .ant-btn {
+  color: rgba(0, 0, 0, 0.88) !important;
+}
+
+.dark-theme .code-actions .ant-btn:hover {
+  color: rgba(0, 0, 0, 0.88) !important;
+  background-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+.dark-theme .code-actions .ant-btn:focus {
+  color: rgba(0, 0, 0, 0.88) !important;
 }
 </style>

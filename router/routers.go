@@ -7,6 +7,7 @@ import (
 	"github.com/0xJacky/Nginx-UI/api/certificate"
 	"github.com/0xJacky/Nginx-UI/api/cluster"
 	"github.com/0xJacky/Nginx-UI/api/config"
+	"github.com/0xJacky/Nginx-UI/api/logs"
 	"github.com/0xJacky/Nginx-UI/api/nginx"
 	nginxLog "github.com/0xJacky/Nginx-UI/api/nginx_log"
 	"github.com/0xJacky/Nginx-UI/api/notification"
@@ -42,6 +43,8 @@ func InitRouter() {
 	root := r.Group("/api")
 	{
 		// Public routes (no auth required)
+		logsGroup := root.Group("/logs")
+		logs.InitRouter(logsGroup)
 		public.InitRouter(root)
 		system.InitPublicRouter(root)
 		user.InitAuthRouter(root)
